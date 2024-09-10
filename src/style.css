@@ -1,0 +1,39 @@
+.PageHome {
+    display: flex;
+    flex-direction: column;
+}
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: #f8f8f8;
+  }
+  
+  .navbar-logo img {
+    height: 50px;
+  }
+  
+  .navbar-search input {
+    padding: 5px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+  }
+  
+  .navbar-cart {
+    position: relative;
+    cursor: pointer;
+  }
+  
+  .navbar-user {
+    margin-left: 20px;
+    font-size: 16px;
+  }
+
+
+
+  .pageColumn{
+    display: flex;
+    flex-direction: column;
+  }
