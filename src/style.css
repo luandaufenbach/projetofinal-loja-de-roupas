@@ -93,6 +93,24 @@
     color: #757575;
   }
   
+  .btn-adc-carrinho {
+    background-color: green; /* Define a cor de fundo como verde */
+    color: white;            /* Define a cor do texto como branco */
+    border: none;            /* Remove a borda padrão do botão */
+    padding: 10px 20px;      /* Adiciona preenchimento ao botão */
+    text-align: center;      /* Centraliza o texto dentro do botão */
+    text-decoration: none;   /* Remove sublinhado do texto */
+    display: inline-block;   /* Faz com que o botão se comporte como um bloco em linha */
+    font-size: 16px;         /* Define o tamanho da fonte */
+    margin: 4px 2px;         /* Adiciona margem ao redor do botão */
+    cursor: pointer;         /* Altera o cursor para uma mão ao passar sobre o botão */
+    border-radius: 4px;      /* Adiciona bordas arredondadas ao botão */
+}
+
+.btn-adc-carrinho:hover {
+    background-color: darkgreen; /* Altera a cor de fundo ao passar o mouse */
+}
+
 
 
 

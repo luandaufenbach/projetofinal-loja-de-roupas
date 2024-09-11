@@ -1,32 +1,26 @@
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import Navbar from "../components/navbar";
-import { Link, useNavigate  } from "react-router-dom";
 import "../style.css";
 import { getDocs, collection, query, where } from "firebase/firestore";
 import { db, auth } from "../services/firebaseconfig";
-import { onAuthStateChanged, signOut } from "firebase/auth";
+import { onAuthStateChanged } from "firebase/auth";
 
-export default function Home() {
+export default function Produto() {
   const [produtos, setProdutos] = useState([]);
-  const [user, setUser] = useState([]);
+  const [user, setUser] = useState(null);
   const [userLogado, setUserLogado] = useState([]);
-  const [nomeUser, setNomeUser] = useState([]);
-
-  const navigate = useNavigate()
+  const [nomeUser, setNomeUser] = useState("");
 
   async function getUsuarios() {
     try {
-      console.log(user.email);
-      const q = query(
-        collection(db, "usuarios"),
-        where("email", "==", user.email)
-      );
-      const dataUsuario = await getDocs(q);
-      const lUsuario = dataUsuario.docs.map((doc) => ({
-        ...doc.data(),
-      }));
-      setUserLogado(lUsuario);
-      setNomeUser(lUsuario[0].nome);
+      if (user && user.email) {
+        const q = query(collection(db, "usuarios"), where("email", "==", user.email));
+        const dataUsuario = await getDocs(q);
+        const lUsuario = dataUsuario.docs.map((doc) => ({ ...doc.data() }));
+        setUserLogado(lUsuario);
+        setNomeUser(lUsuario[0].nome);
+      }
     } catch (error) {
       console.log(error);
     }
@@ -52,7 +46,6 @@ export default function Home() {
       } else {
         setUser(null);
       }
-      console.log(user.email);
     });
     return () => unsubscribe();
   }, []);
@@ -67,14 +60,12 @@ export default function Home() {
     }
   }, [user]);
 
-/*   // Função para adicionar o ID do produto no localStorage
   function adicionarAoCarrinho(produtoId) {
     let carrinho = JSON.parse(localStorage.getItem("carrinho")) || [];
-    // Remover verificação para adicionar produtos repetidos
     carrinho.push(produtoId);
     localStorage.setItem("carrinho", JSON.stringify(carrinho));
     alert("Produto adicionado ao carrinho!");
-  } */
+  }
 
   return (
     <div className="PageHome">
@@ -85,18 +76,15 @@ export default function Home() {
             <img
               src={product.imagem}
               style={{ width: "150px", height: "auto" }}
-              alt=""
+              alt={product.nome}
             />
             <div className="product-info">
               <h3 className="product-name">{product.nome}</h3>
               <p className="product-price">{product.preco}</p>
               <p className="product-category">{product.categoria}</p>
-              <button
-                className="btn-adc-carrinho"
-                onClick={() => navigate("/produto")}
-              >
-                Ver mais
-              </button>
+              <Link to={`/product/${product.id}`}>
+                <button className="btn-ver-mais">Ver mais</button>
+              </Link>
             </div>
           </div>
         ))}
