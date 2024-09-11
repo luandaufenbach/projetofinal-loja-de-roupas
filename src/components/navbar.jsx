@@ -1,8 +1,11 @@
 import React from 'react';
 import { FaShoppingCart } from 'react-icons/fa'; // Ícone do carrinho de compras
 import '../style.css'; // Certifique-se de ter um arquivo CSS para estilizar
+import { Link, useNavigate  } from "react-router-dom";
 
-const Navbar = ({ userId }) => {
+
+const Navbar = ({ user }) => {
+
   return (
     <nav className="navbar">
       <div className="navbar-logo">
@@ -18,7 +21,7 @@ const Navbar = ({ userId }) => {
       </div>
 
       <div className="navbar-user">
-        {userId ? `Bem-vindo, ${userId}` : 'Entrar'}
+        {user ? `Bem-vindo, ${user}` : <Link to={"/login"}>Entrar</Link> }
       </div>
     </nav>
   );
