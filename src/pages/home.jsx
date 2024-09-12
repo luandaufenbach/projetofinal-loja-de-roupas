@@ -89,7 +89,7 @@ export default function Home() {
             />
             <div className="product-info">
               <h3 className="product-name">{product.nome}</h3>
-              <p className="product-price">{product.preco}</p>
+              <p className="product-price">R$ {product.preco}</p>
               <p className="product-category">{product.categoria}</p>
               <button
                 className="btn-adc-carrinho"

@@ -4,12 +4,14 @@ import AddProduto from  "./pages/addProduto";
 import Login from "./pages/login";
 import Signup from "./pages/signup";
 import Produto from "./pages/produto";
+import 'bootstrap/dist/css/bootstrap.min.css';
+
 function App() {
   return (
     <>
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/AdiconarProduto" element={<AddProduto/>}/>
+        <Route path="/AdicionarProduto" element={<AddProduto/>}/>
         <Route path="/login" element={<Login/>}/>
         <Route path="/signup" element={<Signup/>}/>
         <Route path="/produto" element={<Produto/>}/>

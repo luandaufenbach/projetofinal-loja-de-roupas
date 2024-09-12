@@ -30,7 +30,7 @@ export default function AddProduto() {
       return;
     }
 
-    const storageRef = ref(storage, `product-images/${productImg.name}`); // Use storage instead of db
+    const storageRef = ref(storage, `product-images/${productImg.name}`);
     const uploadTask = uploadBytesResumable(storageRef, productImg);
 
     uploadTask.on(
@@ -71,39 +71,70 @@ export default function AddProduto() {
   };
 
   return (
-    <div className="pageColumn">
-      <input
-        onChange={(e) => setNomeProduto(e.target.value)}
-        type="text"
-        placeholder="Nome do produto"
-        value={nomeProduto}
-      />
-      <input
-        onChange={(e) => setTamanho(e.target.value)}
-        type="text"
-        placeholder="Tamanho do produto"
-        value={tamanho}
-      />
-      <input
-        onChange={(e) => setPreco(e.target.value)}
-        type="number"
-        placeholder="Valor do produto"
-        value={preco}
-      />
-      <input
-        onChange={(e) => setCategoria(e.target.value)}
-        type="text"
-        placeholder="Categoria do produto (ex: Camiseta)"
-        value={categoria}
-      />
-      <input
-        onChange={productImgHandler}
-        type="file"
-        placeholder="Insira a imagem do produto"
-        id="file"
-      />
-      {error && <p style={{ color: "red" }}>{error}</p>}
-      <button onClick={btnAdicionar}>Adicionar</button>
+    <div className="container mt-4">
+      <div className="card p-4 shadow-sm">
+        <h2 className="mb-4 text-center">Adicionar Produto</h2>
+
+        <div className="mb-3">
+          <label className="form-label">Nome </label>
+          <input
+            onChange={(e) => setNomeProduto(e.target.value)}
+            type="text"
+            className="form-control"
+            placeholder="Nome do produto"
+            value={nomeProduto}
+          />
+        </div>
+
+        <div className="mb-3">
+          <label className="form-label">Tamanho</label>
+          <input
+            onChange={(e) => setTamanho(e.target.value)}
+            type="text"
+            className="form-control"
+            placeholder="Tamanho do produto"
+            value={tamanho}
+          />
+        </div>
+
+        <div className="mb-3">
+          <label className="form-label">Valor</label>
+          <input
+            onChange={(e) => setPreco(e.target.value)}
+            type="number"
+            className="form-control"
+            placeholder="Valor do produto (ex.: 120.00)"
+            value={preco}
+          />
+        </div>
+
+        <div className="mb-3">
+          <label className="form-label">Categoria do produto</label>
+          <input
+            onChange={(e) => setCategoria(e.target.value)}
+            type="text"
+            className="form-control"
+            placeholder="Categoria do produto (ex.: Camiseta)"
+            value={categoria}
+          />
+        </div>
+
+        <div className="mb-3">
+          <label className="form-label">Imagem do produto</label>
+          <input
+            onChange={productImgHandler}
+            type="file"
+            className="form-control"
+            placeholder="Insira a imagem do produto"
+            id="file"
+          />
+          {error && <p className="text-danger">{error}</p>}
+        </div>
+
+        <button onClick={btnAdicionar} className="btn btn-primary w-100">
+          Adicionar Produto
+        </button>
+      </div>
     </div>
   );
 }
