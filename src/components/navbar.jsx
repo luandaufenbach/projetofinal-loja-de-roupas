@@ -7,10 +7,9 @@ const Navbar = ({ user }) => {
 
   return (
     <nav className="navbar">
-      <div className="navbar-logo">
-        <img src="/logo.png" alt="Logo da Marca" />{" "}
-        {/* Insira o caminho da logo */}
-      </div>
+    <div className="navbar-logo">
+      <img src="/images/logo.png" alt="Logo da Marca" />
+    </div>
 
       <div className="navbar-search">
         <input type="text" placeholder="Buscar..." />

@@ -21,6 +21,7 @@
   
   .navbar-logo img {
     height: 50px;
+    width: 100px;
   }
   
   .navbar-search input {
@@ -94,7 +95,7 @@
   }
   
   .btn-adc-carrinho {
-    background-color: green; /* Define a cor de fundo como verde */
+    background-color: #002d49; /* Define a cor de fundo como verde */
     color: white;            /* Define a cor do texto como branco */
     border: none;            /* Remove a borda padrão do botão */
     padding: 10px 20px;      /* Adiciona preenchimento ao botão */

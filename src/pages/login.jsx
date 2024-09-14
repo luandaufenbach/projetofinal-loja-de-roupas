@@ -32,6 +32,7 @@ export default function Login() {
           type="email"
           onChange={(e) => setEmail(e.target.value)}
           value={email}
+          placeholder="Digite seu email"
         />
         <label className="form-label">Senha</label>
         <input
@@ -39,6 +40,7 @@ export default function Login() {
           type="password"
           onChange={(e) => setSenha(e.target.value)}
           value={senha}
+          placeholder="Digite sua senha"
         />
         <br />
         <button onClick={login} className="btn btn-primary w-100 mb-3">
