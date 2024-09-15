@@ -1,37 +1,34 @@
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import Navbar from "../components/navbar";
-import { Link, useNavigate  } from "react-router-dom";
 import "../style.css";
 import { getDocs, collection, query, where } from "firebase/firestore";
 import { db, auth } from "../services/firebaseconfig";
-import { onAuthStateChanged, signOut } from "firebase/auth";
+import { onAuthStateChanged } from "firebase/auth";
 
 export default function Home() {
   const [produtos, setProdutos] = useState([]);
-  const [user, setUser] = useState([]);
+  const [filteredProdutos, setFilteredProdutos] = useState([]);
+  const [user, setUser] = useState(null);
   const [userLogado, setUserLogado] = useState([]);
-  const [nomeUser, setNomeUser] = useState([]);
+  const [nomeUser, setNomeUser] = useState("");
 
-  const navigate = useNavigate()
-
+  // Função para buscar informações do usuário logado
   async function getUsuarios() {
     try {
-      console.log(user.email);
-      const q = query(
-        collection(db, "usuarios"),
-        where("email", "==", user.email)
-      );
-      const dataUsuario = await getDocs(q);
-      const lUsuario = dataUsuario.docs.map((doc) => ({
-        ...doc.data(),
-      }));
-      setUserLogado(lUsuario);
-      setNomeUser(lUsuario[0].nome);
+      if (user && user.email) {
+        const q = query(collection(db, "usuarios"), where("email", "==", user.email));
+        const dataUsuario = await getDocs(q);
+        const lUsuario = dataUsuario.docs.map((doc) => ({ ...doc.data() }));
+        setUserLogado(lUsuario);
+        setNomeUser(lUsuario[0]?.nome);  // Atualiza o nome do usuário logado
+      }
     } catch (error) {
       console.log(error);
     }
   }
 
+  // Função para buscar os produtos do Firestore
   async function getProdutos() {
     try {
       const dataProdutos = await getDocs(collection(db, "produtos"));
@@ -40,6 +37,7 @@ export default function Home() {
         id: doc.id,
       }));
       setProdutos(lProdutos);
+      setFilteredProdutos(lProdutos);  // Inicializa com todos os produtos
     } catch (error) {
       alert(error);
     }
@@ -48,58 +46,59 @@ export default function Home() {
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
-        setUser(user);
+        setUser(user);  // Atualiza o estado do usuário logado
       } else {
         setUser(null);
       }
-      console.log(user.email);
     });
     return () => unsubscribe();
   }, []);
 
   useEffect(() => {
-    getProdutos();
+    getProdutos();  // Busca os produtos ao carregar a página
   }, []);
 
   useEffect(() => {
     if (user) {
-      getUsuarios();
+      getUsuarios();  // Busca os dados do usuário se estiver logado
     }
   }, [user]);
 
-/*   // Função para adicionar o ID do produto no localStorage
-  function adicionarAoCarrinho(produtoId) {
-    let carrinho = JSON.parse(localStorage.getItem("carrinho")) || [];
-    // Remover verificação para adicionar produtos repetidos
-    carrinho.push(produtoId);
-    localStorage.setItem("carrinho", JSON.stringify(carrinho));
-    alert("Produto adicionado ao carrinho!");
-  } */
+  // Função para filtrar os produtos por categoria
+  const handleCategorySelect = (category) => {
+    const filtered = produtos.filter(produto => produto.categoria === category);
+    setFilteredProdutos(filtered);
+  };
 
   return (
     <div className="PageHome">
-      <Navbar user={nomeUser} />
-      <div className="product-container">
-        {produtos.map((product) => (
-          <div key={product.id} className="product-card">
-            <img
-              src={product.imagem}
-              style={{ width: "150px", height: "auto" }}
-              alt=""
-            />
-            <div className="product-info">
-              <h3 className="product-name">{product.nome}</h3>
-              <p className="product-price">R$ {product.preco}</p>
-              <p className="product-category">{product.categoria}</p>
-              <button
-                className="btn-adc-carrinho"
-                onClick={() => navigate("/produto")}
-              >
-                Ver mais
-              </button>
-            </div>
-          </div>
-        ))}
+      {/* Passa o nome do usuário logado para o Navbar */}
+      <Navbar user={nomeUser} onCategorySelect={handleCategorySelect} />
+      <div className="page-content">
+        <div className="product-container">
+          {/* Exibe os produtos filtrados ou todos os produtos */}
+          {filteredProdutos.length > 0 ? (
+            filteredProdutos.map((product) => (
+              <div key={product.id} className="product-card">
+                <img
+                  src={product.imagem}
+                  style={{ width: "150px", height: "auto" }}
+                  alt={product.nome}
+                />
+                <div className="product-info">
+                  <h3 className="product-name">{product.nome}</h3>
+                  <p className="product-price">R$ {product.preco}</p>
+                  <p className="product-category">{product.categoria}</p>
+                  <Link to={`/produto/${product.id}`}>
+                    <button className="btn-adc-carrinho">Ver mais</button>
+                  </Link>
+                </div>
+              </div>
+            ))
+          ) : (
+            <p>Nenhum produto encontrado para esta categoria</p>
+          )}
+        </div>
       </div>
     </div>
   );

@@ -1,93 +1,69 @@
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { useParams } from "react-router-dom";
+import { getDoc, doc } from "firebase/firestore";
+import { db } from "../services/firebaseconfig";
 import Navbar from "../components/navbar";
 import "../style.css";
-import { getDocs, collection, query, where } from "firebase/firestore";
-import { db, auth } from "../services/firebaseconfig";
-import { onAuthStateChanged } from "firebase/auth";
 
 export default function Produto() {
-  const [produtos, setProdutos] = useState([]);
-  const [user, setUser] = useState(null);
-  const [userLogado, setUserLogado] = useState([]);
-  const [nomeUser, setNomeUser] = useState("");
+  const { id } = useParams(); // Pega o id da URL
+  const [produto, setProduto] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  async function getUsuarios() {
-    try {
-      if (user && user.email) {
-        const q = query(collection(db, "usuarios"), where("email", "==", user.email));
-        const dataUsuario = await getDocs(q);
-        const lUsuario = dataUsuario.docs.map((doc) => ({ ...doc.data() }));
-        setUserLogado(lUsuario);
-        setNomeUser(lUsuario[0].nome);
+  useEffect(() => {
+    async function fetchProduto() {
+      try {
+        const produtoDoc = await getDoc(doc(db, "produtos", id));
+        if (produtoDoc.exists()) {
+          setProduto(produtoDoc.data());
+        } else {
+          alert("Produto não encontrado");
+        }
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setLoading(false);
       }
-    } catch (error) {
-      console.log(error);
     }
-  }
 
-  async function getProdutos() {
-    try {
-      const dataProdutos = await getDocs(collection(db, "produtos"));
-      const lProdutos = dataProdutos.docs.map((doc) => ({
-        ...doc.data(),
-        id: doc.id,
-      }));
-      setProdutos(lProdutos);
-    } catch (error) {
-      alert(error);
-    }
-  }
+    fetchProduto();
+  }, [id]);
 
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      if (user) {
-        setUser(user);
-      } else {
-        setUser(null);
-      }
-    });
-    return () => unsubscribe();
-  }, []);
-
-  useEffect(() => {
-    getProdutos();
-  }, []);
-
-  useEffect(() => {
-    if (user) {
-      getUsuarios();
-    }
-  }, [user]);
-
-  function adicionarAoCarrinho(produtoId) {
+  function adicionarAoCarrinho() {
     let carrinho = JSON.parse(localStorage.getItem("carrinho")) || [];
-    carrinho.push(produtoId);
+    carrinho.push(id);
     localStorage.setItem("carrinho", JSON.stringify(carrinho));
     alert("Produto adicionado ao carrinho!");
   }
 
+  if (loading) {
+    return <p>Carregando...</p>;
+  }
+
+  if (!produto) {
+    return <p>Produto não encontrado</p>;
+  }
+
   return (
     <div className="PageHome">
-      <Navbar user={nomeUser} />
-      <div className="product-container">
-        {produtos.map((product) => (
-          <div key={product.id} className="product-card">
-            <img
-              src={product.imagem}
-              style={{ width: "150px", height: "auto" }}
-              alt={product.nome}
-            />
-            <div className="product-info">
-              <h3 className="product-name">{product.nome}</h3>
-              <p className="product-price">{product.preco}</p>
-              <p className="product-category">{product.categoria}</p>
-              <Link to={`/product/${product.id}`}>
-                <button className="btn-ver-mais">Ver mais</button>
-              </Link>
-            </div>
-          </div>
-        ))}
+      <Navbar />
+      <div className="product-details">
+        <div className="product-image-container">
+          <img
+            src={produto.imagem}
+            alt={produto.nome}
+            className="product-main-image"
+          />
+        </div>
+        <div className="product-info">
+          <h2>{produto.nome}</h2>
+          <p className="product-price">Preço: R$ {produto.preco}</p>
+          <p>Categoria: {produto.categoria}</p>
+          <p>Tamanhos disponíveis: {produto.tamanho}</p>
+          <button onClick={adicionarAoCarrinho} className="btn-adc-carrinho">
+            Adicionar ao Carrinho
+          </button>
+        </div>
       </div>
     </div>
   );
