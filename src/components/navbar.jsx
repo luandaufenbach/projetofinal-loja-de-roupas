@@ -19,7 +19,9 @@ const Navbar = ({ user, onCategorySelect }) => {
 
         <div className="navbar-right">
           <div className="navbar-cart">
-            <FaShoppingCart size={24} />
+            <Link to="/carrinho">
+              <FaShoppingCart size={24} />
+            </Link>
           </div>
 
           <div className="navbar-contact">
@@ -29,18 +31,18 @@ const Navbar = ({ user, onCategorySelect }) => {
           </div>
 
           <div className="navbar-user">
-            {user ? `Bem-vindo, ${user}` : <Link to={"/login"} className="btn-login">Entrar</Link>}
+            {user ? `Bem-vindo, ${user}` : <Link to="/login" className="btn-login">Entrar</Link>}
           </div>
         </div>
       </div>
 
       <ul className="navbar-categories">
-        <li onClick={() => onCategorySelect("Camiseta")}><strong>CAMISETA</strong></li>
-        <li onClick={() => onCategorySelect("Camiseta manga longa")}><strong>CAMISETA MANGA LONGA</strong></li>
+        <li onClick={() => onCategorySelect("Camiseta")}><strong>CAMISETAS</strong></li>
+        <li onClick={() => onCategorySelect("Camiseta manga longa")}><strong>CAMISETAS MANGA LONGA</strong></li>
         <li onClick={() => onCategorySelect("Jaqueta")}><strong>JAQUETAS</strong></li>
-        <li onClick={() => onCategorySelect("Moletom")}><strong>MOLETOM</strong></li>
-        <li onClick={() => onCategorySelect("Calça")}><strong>CALÇA</strong></li>
-        <li onClick={() => onCategorySelect("Bermuda")}><strong>BERMUDA</strong></li>
+        <li onClick={() => onCategorySelect("Moletom")}><strong>MOLETONS</strong></li>
+        <li onClick={() => onCategorySelect("Calça")}><strong>CALÇAS</strong></li>
+        <li onClick={() => onCategorySelect("Bermuda")}><strong>BERMUDAS</strong></li>
       </ul>
     </nav>
   );

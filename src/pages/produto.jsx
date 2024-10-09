@@ -31,10 +31,18 @@ export default function Produto() {
 
   function adicionarAoCarrinho() {
     let carrinho = JSON.parse(localStorage.getItem("carrinho")) || [];
-    carrinho.push(id);
+    const produtoAdicionado = {
+      id: id,
+      nome: produto.nome,
+      preco: produto.preco,
+      imagem: produto.imagem,
+      tamanho: produto.tamanho,
+    };
+    carrinho.push(produtoAdicionado);
     localStorage.setItem("carrinho", JSON.stringify(carrinho));
     alert("Produto adicionado ao carrinho!");
   }
+  
 
   if (loading) {
     return <p>Carregando...</p>;

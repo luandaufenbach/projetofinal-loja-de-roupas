@@ -17,11 +17,14 @@ export default function Home() {
   async function getUsuarios() {
     try {
       if (user && user.email) {
-        const q = query(collection(db, "usuarios"), where("email", "==", user.email));
+        const q = query(
+          collection(db, "usuarios"),
+          where("email", "==", user.email)
+        );
         const dataUsuario = await getDocs(q);
         const lUsuario = dataUsuario.docs.map((doc) => ({ ...doc.data() }));
         setUserLogado(lUsuario);
-        setNomeUser(lUsuario[0]?.nome);  // Atualiza o nome do usuário logado
+        setNomeUser(lUsuario[0]?.nome); // Atualiza o nome do usuário logado
       }
     } catch (error) {
       console.log(error);
@@ -37,7 +40,7 @@ export default function Home() {
         id: doc.id,
       }));
       setProdutos(lProdutos);
-      setFilteredProdutos(lProdutos);  // Inicializa com todos os produtos
+      setFilteredProdutos(lProdutos); // Inicializa com todos os produtos
     } catch (error) {
       alert(error);
     }
@@ -46,7 +49,7 @@ export default function Home() {
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
-        setUser(user);  // Atualiza o estado do usuário logado
+        setUser(user); // Atualiza o estado do usuário logado
       } else {
         setUser(null);
       }
@@ -55,18 +58,20 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
-    getProdutos();  // Busca os produtos ao carregar a página
+    getProdutos(); // Busca os produtos ao carregar a página
   }, []);
 
   useEffect(() => {
     if (user) {
-      getUsuarios();  // Busca os dados do usuário se estiver logado
+      getUsuarios(); // Busca os dados do usuário se estiver logado
     }
   }, [user]);
 
   // Função para filtrar os produtos por categoria
   const handleCategorySelect = (category) => {
-    const filtered = produtos.filter(produto => produto.categoria === category);
+    const filtered = produtos.filter(
+      (produto) => produto.categoria === category
+    );
     setFilteredProdutos(filtered);
   };
 
