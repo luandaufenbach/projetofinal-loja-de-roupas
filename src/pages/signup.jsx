@@ -6,10 +6,11 @@ import { createUserWithEmailAndPassword } from "firebase/auth";
 
 export default function Signup() {
   const navigate = useNavigate();
-
+  
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
   const [nome, setNome] = useState("");
+  const [adminCode, setAdminCode] = useState(""); // Código especial para admin
 
   async function signup() {
     if (!nome || !email || !senha) {
@@ -20,19 +21,20 @@ export default function Signup() {
       alert("Sua senha precisa ter 6 caracteres!");
       return;
     }
+
     try {
-      const userCredential = await createUserWithEmailAndPassword(
-        auth,
-        email,
-        senha
-      );
+      const userCredential = await createUserWithEmailAndPassword(auth, email, senha);
+
+      // Verifica se o usuário possui o código de administrador
+      const role = adminCode === "11111" ? "admin" : "user";
+
+      // Armazena o papel do usuário no Firestore
       await setDoc(doc(db, "usuarios", email), {
         nome: nome,
         email: email,
+        role: role,  // "admin" ou "user"
       });
-      setNome("");
-      setEmail("");
-      setSenha("");
+
       alert("Conta criada com sucesso!");
       navigate("/login");
     } catch (error) {
@@ -75,6 +77,17 @@ export default function Signup() {
             placeholder="Digite sua senha"
             onChange={(e) => setSenha(e.target.value)}
             value={senha}
+          />
+        </div>
+
+        <div className="mb-3">
+          <label className="form-label">Código de administrador (opcional)</label>
+          <input
+            className="form-control"
+            type="text"
+            placeholder="Digite o código de administrador"
+            onChange={(e) => setAdminCode(e.target.value)}
+            value={adminCode}
           />
         </div>
 

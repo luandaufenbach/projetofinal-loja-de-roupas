@@ -40,6 +40,8 @@ const Cart = () => {
     alert(`Compra finalizada! Total: R$ ${totalPrice}`);
     clearCart(); // Limpa o carrinho após finalizar a compra
   };
+  console.log(cartItems);
+
 
   return (
     <div className="container mt-5">

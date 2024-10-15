@@ -5,6 +5,8 @@ import AddProduto from "./pages/addProduto";
 import Login from "./pages/login";
 import Signup from "./pages/signup";
 import Produto from "./pages/produto";
+import AdmProduto from "./pages/admProduto";
+import AdmHome from "./pages/admHome";
 import Cart from "./pages/cart"; // Página de carrinho
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -25,6 +27,8 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/produto/:id" element={<Produto addToCart={addToCart} />} />
+        <Route path="/admHome" element={<AdmHome />} />
+        <Route path="/admProduto/:id" element={<AdmProduto />} />
         <Route path="/carrinho" element={<Cart cartItems={cartItems} />} /> {/* Página do Carrinho */}
       </Routes>
     </>
