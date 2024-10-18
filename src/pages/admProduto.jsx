@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { getDoc, doc, updateDoc, deleteDoc } from "firebase/firestore";
 import { db } from "../services/firebaseconfig";
-import Navbar from "../components/navbar";
+import Navbar from "../components/admNavbar";
 import "../style.css";
 
 export default function AdmProduto() {

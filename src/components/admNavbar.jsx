@@ -1,14 +1,16 @@
 import React from "react";
-import { FaShoppingCart, FaWhatsapp } from "react-icons/fa";
+import { FaWhatsapp } from "react-icons/fa";
+import { CgAddR } from "react-icons/cg";
 import "../style.css";
 import { Link } from "react-router-dom";
 
-const Navbar = ({ user, onCategorySelect }) => {
+const AdmNavbar = ({ admin, onCategorySelect }) => {
   return (
     <nav className="navbar-container">
       <div className="navbar">
         <div className="navbar-logo">
-          <Link to="/">
+          {/* Redirecionar para a página admHome ao clicar na logo */}
+          <Link to="/admHome">
             <img src="/images/logo.png" alt="Logo da Marca" />
           </Link>
         </div>
@@ -18,24 +20,27 @@ const Navbar = ({ user, onCategorySelect }) => {
         </div>
 
         <div className="navbar-right">
+          {/* Botão para acessar o carrinho de compras (caso seja necessário para o administrador) */}
           <div className="navbar-cart">
-            <Link to="/carrinho">
-              <FaShoppingCart size={24} style = {{color: "black"}} />
+            <Link to="/AdicionarProduto">
+              <CgAddR size={24} style = {{color: "black"}} />
             </Link>
           </div>
 
+          {/* Contato via WhatsApp */}
           <div className="navbar-contact">
             <a href="https://wa.me/5548999425176" target="_blank" rel="noopener noreferrer">
               <FaWhatsapp size={24} /> Fale Conosco
             </a>
           </div>
 
+          {/* Verificação se o admin está logado */}
           <div className="navbar-user">
-            {user ? `Bem-vindo, ${user}` : <Link to="/login" className="btn-login">Entrar</Link>}
+            {admin ? `Bem-vindo, Admin` : <Link to="/login" className="btn-login">Entrar</Link>}
+            
           </div>
         </div>
       </div>
-
       <ul className="navbar-categories">
         <li onClick={() => onCategorySelect("Camiseta")}><strong>CAMISETAS</strong></li>
         <li onClick={() => onCategorySelect("Camiseta manga longa")}><strong>CAMISETAS MANGA LONGA</strong></li>
@@ -48,4 +53,5 @@ const Navbar = ({ user, onCategorySelect }) => {
   );
 };
 
-export default Navbar;
+
+export default AdmNavbar;

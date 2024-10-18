@@ -1,12 +1,14 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import Navbar from "../components/navbar";
+import AdmNavbar from "../components/admNavbar"; // Navbar para administrador
 import "../style.css";
 import { getDocs, collection } from "firebase/firestore";
 import { db } from "../services/firebaseconfig";
 
 export default function AdmHome() {
   const [produtos, setProdutos] = useState([]);
+  const [filteredProdutos, setFilteredProdutos] = useState([]);
+  const [nomeUser, setNomeUser] = useState("");
 
   // Função para buscar os produtos do Firestore
   async function getProdutos() {
@@ -17,6 +19,7 @@ export default function AdmHome() {
         id: doc.id,
       }));
       setProdutos(lProdutos);
+      setFilteredProdutos(lProdutos); // Inicializa com todos os produtos
     } catch (error) {
       alert(error);
     }
@@ -26,14 +29,23 @@ export default function AdmHome() {
     getProdutos(); // Busca os produtos ao carregar a página
   }, []);
 
+  // Função para filtrar os produtos por categoria
+  const handleCategorySelect = (category) => {
+    const filtered = produtos.filter(
+      (produto) => produto.categoria === category
+    );
+    setFilteredProdutos(filtered);
+  };
+
   return (
     <div className="PageHome">
-      <Navbar />
+      {/* Passa o nome do administrador logado para o AdmNavbar */}
+      <AdmNavbar user={nomeUser} onCategorySelect={handleCategorySelect} />
       <div className="page-content">
         <div className="product-container">
-          {/* Exibe todos os produtos */}
-          {produtos.length > 0 ? (
-            produtos.map((product) => (
+          {/* Exibe os produtos filtrados ou todos os produtos */}
+          {filteredProdutos.length > 0 ? (
+            filteredProdutos.map((product) => (
               <div key={product.id} className="product-card">
                 <img
                   src={product.imagem}
@@ -51,7 +63,7 @@ export default function AdmHome() {
               </div>
             ))
           ) : (
-            <p>Nenhum produto encontrado</p>
+            <p>Nenhum produto encontrado para esta categoria</p>
           )}
         </div>
       </div>

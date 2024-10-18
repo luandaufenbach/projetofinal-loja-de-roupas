@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import Navbar from "../components/navbar";
+import Navbar from "../components/navbar"; // Navbar para usuário comum
 import "../style.css";
 import { getDocs, collection, query, where } from "firebase/firestore";
 import { db, auth } from "../services/firebaseconfig";
@@ -10,7 +10,6 @@ export default function Home() {
   const [produtos, setProdutos] = useState([]);
   const [filteredProdutos, setFilteredProdutos] = useState([]);
   const [user, setUser] = useState(null);
-  const [userLogado, setUserLogado] = useState([]);
   const [nomeUser, setNomeUser] = useState("");
 
   // Função para buscar informações do usuário logado
@@ -23,7 +22,6 @@ export default function Home() {
         );
         const dataUsuario = await getDocs(q);
         const lUsuario = dataUsuario.docs.map((doc) => ({ ...doc.data() }));
-        setUserLogado(lUsuario);
         setNomeUser(lUsuario[0]?.nome); // Atualiza o nome do usuário logado
       }
     } catch (error) {
