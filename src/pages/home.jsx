@@ -29,7 +29,7 @@ export default function Home() {
     }
   }
 
-  // Função para buscar os produtos do Firestore
+  // Função para os produtos do Firestore
   async function getProdutos() {
     try {
       const dataProdutos = await getDocs(collection(db, "produtos"));

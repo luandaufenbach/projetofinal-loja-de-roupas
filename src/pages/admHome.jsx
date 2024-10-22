@@ -39,11 +39,11 @@ export default function AdmHome() {
 
   return (
     <div className="PageHome">
-      {/* Passa o nome do administrador logado para o AdmNavbar */}
+      {/* Passa o nome do adn logado para o AdmNavbar */}
       <AdmNavbar user={nomeUser} onCategorySelect={handleCategorySelect} />
       <div className="page-content">
         <div className="product-container">
-          {/* Exibe os produtos filtrados ou todos os produtos */}
+          {/*produtos filtrados ou todos os produtos */}
           {filteredProdutos.length > 0 ? (
             filteredProdutos.map((product) => (
               <div key={product.id} className="product-card">

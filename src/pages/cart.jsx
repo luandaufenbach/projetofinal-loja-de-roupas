@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { FaTrash } from "react-icons/fa";  // Ícone de lixeira
+import { FaTrash } from "react-icons/fa"; 
+import { useNavigate } from 'react-router-dom';
 
 const Cart = () => {
+  const navigate = useNavigate();
   const [cartItems, setCartItems] = useState([]);
   const [totalPrice, setTotalPrice] = useState(0);
 
@@ -11,11 +13,11 @@ const Cart = () => {
     const savedCart = JSON.parse(localStorage.getItem("carrinho")) || [];
     setCartItems(savedCart);
     calculateTotalPrice(savedCart);
-  }, []);
+  }, []); 
 
   // Função para calcular o preço total dos itens
   const calculateTotalPrice = (items) => {
-    const total = items.reduce((sum, item) => sum + item.preco, 0);
+    const total = items.reduce((sum, item) => sum + parseFloat(item.preco), 0); // Converta o preço para número
     setTotalPrice(total);
   };
 
@@ -35,13 +37,12 @@ const Cart = () => {
     alert("Carrinho limpo!");
   };
 
-  // Função para finalizar a compra (pode ser customizada)
+  // Função para finalizar a compra
   const finalizePurchase = () => {
-    alert(`Compra finalizada! Total: R$ ${totalPrice}`);
-    clearCart(); // Limpa o carrinho após finalizar a compra
+    navigate('/checkout'); //  página de checkout
   };
-  console.log(cartItems);
 
+  console.log(cartItems);
 
   return (
     <div className="container mt-5">
@@ -58,7 +59,7 @@ const Cart = () => {
                 <th>Nome</th>
                 <th>Tamanho</th>
                 <th>Preço (R$)</th>
-                <th>Remover</th> {/* Nova coluna para remover o item */}
+                <th>Remover</th> 
               </tr>
             </thead>
             <tbody>
@@ -74,13 +75,13 @@ const Cart = () => {
                   </td>
                   <td>{item.nome}</td>
                   <td>{item.tamanho}</td>
-                  <td>{item.preco.toFixed(2)}</td>
+                  <td>{parseFloat(item.preco).toFixed(2)}</td> 
                   <td>
                     <button
                       className="btn btn-danger"
                       onClick={() => removeItem(index)}
                     >
-                      <FaTrash /> {/* Ícone de lixeira */}
+                      <FaTrash /> {/* icon de lixeira */}
                     </button>
                   </td>
                 </tr>

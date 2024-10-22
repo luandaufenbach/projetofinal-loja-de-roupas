@@ -54,13 +54,13 @@ export default function AddProduto() {
             imagem: url,
           });
 
-          // Clear the form fields
+
           setNomeProduto("");
           setTamanho("");
           setPreco("");
           setCategoria("");
           setProductImg(null);
-          document.getElementById("file").value = ""; // Clear file input
+          document.getElementById("file").value = ""; 
           alert("Produto adicionado com sucesso!");
         } catch (error) {
           console.error("Error adding document: ", error);

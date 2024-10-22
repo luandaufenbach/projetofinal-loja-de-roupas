@@ -22,11 +22,11 @@ export default function Signup() {
       return;
     }
 
+    /* arrumar dps, n é necessário */
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, email, senha);
 
-      // Verifica se o usuário possui o código de administrador
-      const role = adminCode === "11111" ? "admin" : "user";
+
 
       // Armazena o papel do usuário no Firestore
       await setDoc(doc(db, "usuarios", email), {
@@ -80,7 +80,7 @@ export default function Signup() {
           />
         </div>
 
-        <div className="mb-3">
+{/*         <div className="mb-3">
           <label className="form-label">Código de administrador (opcional)</label>
           <input
             className="form-control"
@@ -89,7 +89,7 @@ export default function Signup() {
             onChange={(e) => setAdminCode(e.target.value)}
             value={adminCode}
           />
-        </div>
+        </div> */}
 
         <button onClick={signup} className="btn btn-primary w-100 mb-3">
           Criar Conta

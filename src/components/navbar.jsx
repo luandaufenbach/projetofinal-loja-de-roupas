@@ -9,7 +9,7 @@ const Navbar = ({ user, onCategorySelect }) => {
       <div className="navbar">
         <div className="navbar-logo">
           <Link to="/">
-            <img src="/images/logo.png" alt="Logo da Marca" />
+            <img src="/images/logo.png" alt="Logo da loja de roupas" />
           </Link>
         </div>
 
@@ -20,7 +20,7 @@ const Navbar = ({ user, onCategorySelect }) => {
         <div className="navbar-right">
           <div className="navbar-cart">
             <Link to="/carrinho">
-              <FaShoppingCart size={24} style = {{color: "black"}} />
+              <FaShoppingCart size={24} style={{ color: "black" }} />
             </Link>
           </div>
 
@@ -31,7 +31,11 @@ const Navbar = ({ user, onCategorySelect }) => {
           </div>
 
           <div className="navbar-user">
-            {user ? `Bem-vindo, ${user}` : <Link to="/login" className="btn-login">Entrar</Link>}
+            {user ? (
+              <span>{`Bem-vindo, ${user}`}</span>
+            ) : (
+              <Link to="/login" className="btn-login">Entrar</Link>
+            )}
           </div>
         </div>
       </div>

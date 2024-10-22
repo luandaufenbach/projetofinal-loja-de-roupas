@@ -9,8 +9,15 @@ export default function Produto() {
   const { id } = useParams(); // Pega o id da URL
   const [produto, setProduto] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [user, setUser] = useState(null); // Estado para armazenar o usuário
 
   useEffect(() => {
+    // Simulação da verificação do usuário logado
+    const loggedInUser = localStorage.getItem("user");
+    if (loggedInUser) {
+      setUser(loggedInUser); // Define o usuário logado
+    }
+
     async function fetchProduto() {
       try {
         const produtoDoc = await getDoc(doc(db, "produtos", id));
@@ -30,19 +37,29 @@ export default function Produto() {
   }, [id]);
 
   function adicionarAoCarrinho() {
+    if (!produto) {
+      alert("Produto não encontrado");
+      return;
+    }
+  
     let carrinho = JSON.parse(localStorage.getItem("carrinho")) || [];
     const produtoAdicionado = {
       id: id,
       nome: produto.nome,
-      preco: produto.preco,
+      preco: parseFloat(produto.preco), // Certifique-se de que o preço é numérico
       imagem: produto.imagem,
       tamanho: produto.tamanho,
     };
+    
     carrinho.push(produtoAdicionado);
     localStorage.setItem("carrinho", JSON.stringify(carrinho));
     alert("Produto adicionado ao carrinho!");
   }
   
+  function handleCategorySelect(category) {
+    // Implementar o filtro de categoria conforme necessário
+    console.log(`Categoria selecionada: ${category}`);
+  }
 
   if (loading) {
     return <p>Carregando...</p>;
@@ -54,7 +71,8 @@ export default function Produto() {
 
   return (
     <div className="PageHome">
-      <Navbar />
+      {/* Passar o user e onCategorySelect para a Navbar */}
+      <Navbar user={user} onCategorySelect={handleCategorySelect} />
       <div className="product-details">
         <div className="product-image-container">
           <img
