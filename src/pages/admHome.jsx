@@ -4,11 +4,12 @@ import AdmNavbar from "../components/admNavbar"; // Navbar para administrador
 import "../style.css";
 import { getDocs, collection } from "firebase/firestore";
 import { db } from "../services/firebaseconfig";
+import { auth } from "../services/firebaseconfig"; // Importa o auth do Firebase
 
 export default function AdmHome() {
   const [produtos, setProdutos] = useState([]);
   const [filteredProdutos, setFilteredProdutos] = useState([]);
-  const [nomeUser, setNomeUser] = useState("");
+  const [nomeUser, setNomeUser] = useState(""); // Estado para o nome do usuário
 
   // Função para buscar os produtos do Firestore
   async function getProdutos() {
@@ -25,6 +26,14 @@ export default function AdmHome() {
     }
   }
 
+  // Função para pegar o nome do usuário logado
+  useEffect(() => {
+    const user = auth.currentUser;
+    if (user) {
+      setNomeUser(user.displayName || "Admin"); // Usa o displayName ou "Admin" como fallback
+    }
+  }, []);
+
   useEffect(() => {
     getProdutos(); // Busca os produtos ao carregar a página
   }, []);
@@ -39,8 +48,8 @@ export default function AdmHome() {
 
   return (
     <div className="PageHome">
-      {/* Passa o nome do adn logado para o AdmNavbar */}
-      <AdmNavbar user={nomeUser} onCategorySelect={handleCategorySelect} />
+      {/* Passa o nome do usuário logado para o AdmNavbar */}
+      <AdmNavbar admin={nomeUser} onCategorySelect={handleCategorySelect} />
       <div className="page-content">
         <div className="product-container">
           {/*produtos filtrados ou todos os produtos */}

@@ -1,9 +1,26 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { FaShoppingCart, FaWhatsapp } from "react-icons/fa";
-import "../style.css";
 import { Link } from "react-router-dom";
+import { auth } from "../services/firebaseconfig"; // Importar a autenticação do Firebase
+import { onAuthStateChanged } from "firebase/auth";
+import "../style.css";
 
-const Navbar = ({ user, onCategorySelect }) => {
+const Navbar = ({ onCategorySelect }) => {
+  const [user, setUser] = useState(null); // Estado para o usuário logado
+
+  // verificar se o usuário está logado ao carregar a página
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      if (currentUser) {
+        setUser(currentUser.displayName || currentUser.email); // o nome ou email do usuário
+      } else {
+        setUser(null); // Se não houver usuário logado
+      }
+    });
+
+    return () => unsubscribe(); // Limpar a função ao desmontar o componente
+  }, []);
+
   return (
     <nav className="navbar-container">
       <div className="navbar">
@@ -32,7 +49,15 @@ const Navbar = ({ user, onCategorySelect }) => {
 
           <div className="navbar-user">
             {user ? (
-              <span>{`Bem-vindo, ${user}`}</span>
+              <>
+                <span>{`Bem-vindo, ${user}`}</span>
+                <button
+                  className="btn-logout"
+                  onClick={() => auth.signOut().then(() => setUser(null))}
+                >
+                  Sair
+                </button>
+              </>
             ) : (
               <Link to="/login" className="btn-login">Entrar</Link>
             )}

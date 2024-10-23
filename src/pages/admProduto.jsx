@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { getDoc, doc, updateDoc, deleteDoc } from "firebase/firestore";
-import { db } from "../services/firebaseconfig";
+import { db, auth } from "../services/firebaseconfig"; // Certifique-se de importar o auth
 import Navbar from "../components/admNavbar";
 import "../style.css";
 
@@ -14,6 +14,7 @@ export default function AdmProduto() {
   const [preco, setPreco] = useState("");
   const [tamanho, setTamanho] = useState("");
   const [categoria, setCategoria] = useState("");
+  const [userName, setUserName] = useState(""); // Adiciona estado para armazenar o nome do usuário
 
   useEffect(() => {
     async function fetchProduto() {
@@ -71,6 +72,18 @@ export default function AdmProduto() {
     }
   }
 
+  // Função para buscar o nome do usuário logado
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+      if (user) {
+        setUserName(user.displayName || user.email); // Pega o displayName, se não, usa o email
+      } else {
+        setUserName("");
+      }
+    });
+    return () => unsubscribe(); // Limpa o listener quando o componente desmontar
+  }, []);
+
   if (loading) {
     return <p>Carregando...</p>;
   }
@@ -81,7 +94,7 @@ export default function AdmProduto() {
 
   return (
     <div className="PageHome">
-      <Navbar />
+      <Navbar userName={userName} /> {/* Passa o nome do usuário para a Navbar */}
       <div className="container mt-5">
         <div className="row">
           <div className="col-md-6">
@@ -143,3 +156,4 @@ export default function AdmProduto() {
     </div>
   );
 }
+ 

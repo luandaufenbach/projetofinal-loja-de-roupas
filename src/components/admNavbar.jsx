@@ -1,10 +1,28 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { FaWhatsapp } from "react-icons/fa";
 import { CgAddR } from "react-icons/cg";
+import { MdRequestPage } from "react-icons/md";
 import { Link } from "react-router-dom";
+import { auth } from "../services/firebaseconfig"; // Importar a autenticação do Firebase
+import { onAuthStateChanged } from "firebase/auth";
 import "../style.css";
 
-const AdmNavbar = ({ admin, onCategorySelect }) => {
+const AdmNavbar = ({ onCategorySelect }) => {
+  const [user, setUser] = useState(null); // Estado para o usuário logado
+
+  // Verificar se o usuário está logado ao carregar a página
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      if (currentUser) {
+        setUser(currentUser.displayName || currentUser.email); // Defina o nome ou email
+      } else {
+        setUser(null); // Se não houver usuário logado
+      }
+    });
+
+    return () => unsubscribe(); // Limpar a função ao desmontar o componente
+  }, []);
+
   return (
     <nav className="navbar-container">
       <div className="navbar">
@@ -21,7 +39,10 @@ const AdmNavbar = ({ admin, onCategorySelect }) => {
         <div className="navbar-right">
           <div className="navbar-cart">
             <Link to="/AdicionarProduto">
-              <CgAddR size={24} style={{ color: "black" }} />
+              <CgAddR size={27} style={{ color: "black" }} />
+            </Link>
+            <Link to="/admPedidos">
+              <MdRequestPage size={27} style={{ color: "black" }} />
             </Link>
           </div>
 
@@ -32,12 +53,19 @@ const AdmNavbar = ({ admin, onCategorySelect }) => {
           </div>
 
           <div className="navbar-user">
-            {admin ? `Bem-vindo, Admin` : <Link to="/login" className="btn-login">Entrar</Link>}
-          </div>
-
-          {/* Link para ver pedidos */}
-          <div className="navbar-orders">
-            <Link to="/admPedidos" className="btn-orders">Ver Pedidos</Link>
+            {user ? (
+              <>
+                <span>{`Bem-vindo, ${user}`}</span>
+                <button
+                  className="btn-logout"
+                  onClick={() => auth.signOut().then(() => setUser(null))}
+                >
+                  Sair
+                </button>
+              </>
+            ) : (
+              <Link to="/login" className="btn-login">Entrar</Link>
+            )}
           </div>
         </div>
       </div>

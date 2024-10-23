@@ -78,9 +78,48 @@ body {
   text-decoration: none;
   font-weight: bold;
   margin: 10px;
+  font-size: 14px; /* Tamanho da fonte */
 }
 
 .btn-login:hover {
+  background-color: #1f1f1f; /* Efeito hover no botão Entrar */
+}
+
+
+.btn-logout {
+  background-color: black; /* Cor de fundo vermelha */
+  color: white; /* Texto branco */
+  border: none; /* Remover borda */
+  padding: 10px 20px; /* Espaçamento interno (padding) */
+  border-radius: 5px; /* Arredondar bordas */
+  cursor: pointer; /* Alterar cursor para pointer ao passar o mouse */
+  font-weight: bold; /* Deixar o texto em negrito */
+  font-size: 14px; /* Tamanho da fonte */
+  margin-left: 10px;
+}
+
+/* Estilo ao passar o mouse (hover) no botão */
+.btn-logout:hover {
+  background-color: #1f1f1f; /* Escurecer o tom de vermelho ao passar o mouse */
+}
+
+
+
+
+
+
+
+.btn-pedidos {
+  background-color: black;
+  color: white;
+  padding: 8px 12px;
+  border-radius: 5px;
+  text-decoration: none;
+  font-weight: bold;
+  margin: 10px;
+}
+
+.btn-pedidos:hover {
   background-color: #1f1f1f; /* Efeito hover no botão Entrar */
 }
 
@@ -175,11 +214,6 @@ body {
 .btn-adc-carrinho:hover {
   background-color: darkgreen; /* Altera a cor de fundo ao passar o mouse */
 }
-
-
-
-
-
 
 
 /* Página de Detalhes do Produto */
