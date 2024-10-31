@@ -15,7 +15,7 @@ const Checkout = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Aqui você pode enviar os dados de entrega ou armazenar no localStorage
+    // dados de entrega ou armazenar no localStorage
     localStorage.setItem('dadosEntrega', JSON.stringify(formData));
     alert('Dados de entrega salvos com sucesso!');
     // Redirecionar ou continuar com o fluxo da compra
