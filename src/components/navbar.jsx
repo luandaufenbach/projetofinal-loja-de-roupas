@@ -1,25 +1,43 @@
 import React, { useState, useEffect } from "react";
 import { FaShoppingCart, FaWhatsapp } from "react-icons/fa";
 import { Link } from "react-router-dom";
-import { auth } from "../services/firebaseconfig"; // Importar a autenticação do Firebase
+import { auth, db } from "../services/firebaseconfig"; // Importar a autenticação e Firestore do Firebase
 import { onAuthStateChanged } from "firebase/auth";
+import { doc, getDoc } from "firebase/firestore"; // Importar funções do Firestore
 import "../style.css";
 
-const Navbar = ({ onCategorySelect }) => {
-  const [user, setUser] = useState(null); // Estado para o usuário logado
+const Navbar = ({ onCategorySelect, onSearch }) => {
+  const [userName, setUserName] = useState(null); // Estado para o nome do usuário
+  const [searchTerm, setSearchTerm] = useState(""); // Estado para o termo de busca
 
-  // verificar se o usuário está logado ao carregar a página
+  // Verificar se o usuário está logado ao carregar a página
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
       if (currentUser) {
-        setUser(currentUser.displayName || currentUser.email); // o nome ou email do usuário
+        // Obter o documento do usuário no Firestore
+        const userDocRef = doc(db, "usuarios", currentUser.email);
+        const userDoc = await getDoc(userDocRef);
+
+        if (userDoc.exists()) {
+          setUserName(userDoc.data().nome); // Define o nome do usuário
+        } else {
+          setUserName(currentUser.email); // Fallback para o email caso o documento não exista
+        }
       } else {
-        setUser(null); // Se não houver usuário logado
+        setUserName(null); // Se não houver usuário logado
       }
     });
 
     return () => unsubscribe(); // Limpar a função ao desmontar o componente
   }, []);
+
+  // Função para lidar com a busca
+  const handleSearch = (e) => {
+    e.preventDefault();
+    if (onSearch && searchTerm.trim() !== "") {
+      onSearch(searchTerm); // Chama a função de busca com o termo
+    }
+  };
 
   return (
     <nav className="navbar-container">
@@ -31,7 +49,15 @@ const Navbar = ({ onCategorySelect }) => {
         </div>
 
         <div className="navbar-search">
-          <input type="text" placeholder="Buscar..." />
+          <form onSubmit={handleSearch}>
+            <input
+              type="text"
+              placeholder="Buscar..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+            <button type="submit" style={{ display: "none" }} />
+          </form>
         </div>
 
         <div className="navbar-right">
@@ -48,12 +74,12 @@ const Navbar = ({ onCategorySelect }) => {
           </div>
 
           <div className="navbar-user">
-            {user ? (
+            {userName ? (
               <>
-                <span>{`Bem-vindo, ${user}`}</span>
+                <span>{`Bem-vindo, ${userName}`}</span>
                 <button
                   className="btn-logout"
-                  onClick={() => auth.signOut().then(() => setUser(null))}
+                  onClick={() => auth.signOut().then(() => setUserName(null))}
                 >
                   Sair
                 </button>
@@ -73,6 +99,8 @@ const Navbar = ({ onCategorySelect }) => {
         <li onClick={() => onCategorySelect("Calça")}><strong>CALÇAS</strong></li>
         <li onClick={() => onCategorySelect("Bermuda")}><strong>BERMUDAS</strong></li>
       </ul>
+      
+      <hr className="traco" />
     </nav>
   );
 };

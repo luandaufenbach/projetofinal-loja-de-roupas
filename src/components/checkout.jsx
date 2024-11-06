@@ -1,4 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { db, auth } from '../services/firebaseConfig'; // Importe o Firebase Auth e Firestore do seu arquivo de configuração
+import { collection, addDoc } from 'firebase/firestore';
+import { onAuthStateChanged } from 'firebase/auth';
 
 const Checkout = () => {
   const [formData, setFormData] = useState({
@@ -7,18 +10,62 @@ const Checkout = () => {
     rua: '',
     complemento: '',
   });
+  const [cartItems, setCartItems] = useState([]);
+  const [userEmail, setUserEmail] = useState(null); // Armazenar o email do usuário
 
+  // Verificar o estado de autenticação e obter o email do usuário
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setUserEmail(user.email);
+      } else {
+        setUserEmail(null);
+      }
+    });
+    return () => unsubscribe();
+  }, []);
+
+  // Carrega os itens do carrinho do localStorage ao carregar a página
+  useEffect(() => {
+    const savedCart = JSON.parse(localStorage.getItem("carrinho")) || [];
+    setCartItems(savedCart);
+  }, []);
+
+  // Função para lidar com mudanças nos campos do formulário
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleSubmit = (e) => {
+  // Função para salvar os dados de entrega e do carrinho no Firestore
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // dados de entrega ou armazenar no localStorage
-    localStorage.setItem('dadosEntrega', JSON.stringify(formData));
-    alert('Dados de entrega salvos com sucesso!');
-    // Redirecionar ou continuar com o fluxo da compra
+
+    if (!userEmail) {
+      alert("Você precisa estar logado para finalizar a compra.");
+      return;
+    }
+
+    try {
+      // Adiciona os dados de entrega, do carrinho e o email ao Firestore
+      await addDoc(collection(db, 'pedidos'), {
+        email: userEmail, // Email do usuário logado
+        endereco: formData,
+        produtos: cartItems,
+        status: 'em processo', // Define um status inicial
+        data: new Date(),
+      });
+
+      alert('Pedido realizado com sucesso!');
+      
+      // Limpar o localStorage e o formulário após o pedido
+      localStorage.removeItem("carrinho");
+      setCartItems([]);
+      setFormData({ cep: '', numero: '', rua: '', complemento: '' });
+    } catch (error) {
+      console.error("Erro ao salvar pedido: ", error);
+      alert('Erro ao finalizar o pedido. Tente novamente.');
+    }
   };
 
   return (
@@ -47,7 +94,6 @@ const Checkout = () => {
             required
           />
         </div>
-        
         <div className="mb-3">
           <label>Rua</label>
           <input

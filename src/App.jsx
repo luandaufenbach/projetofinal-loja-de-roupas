@@ -11,6 +11,7 @@ import Cart from "./pages/cart";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Checkout from './components/Checkout';
 import AdmPedidos from "./pages/admPedidos"; 
+import Pedidos from "./pages/pedidos";
 
 
 function App() {
@@ -35,6 +36,7 @@ function App() {
         <Route path="/carrinho" element={<Cart cartItems={cartItems} />} /> {/* Página do Carrinho */}
         <Route path="/checkout" element={<Checkout />} />
         <Route path="/admPedidos" element={<AdmPedidos />} />
+        <Route path="/pedidos" element={<Pedidos/>} />
 
       </Routes>
     </>
