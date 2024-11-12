@@ -3,8 +3,8 @@ import { Link } from "react-router-dom";
 import AdmNavbar from "../components/admNavbar"; // Navbar para administrador
 import "../style.css";
 import { getDocs, collection } from "firebase/firestore";
-import { db } from "../services/firebaseconfig";
-import { auth } from "../services/firebaseconfig"; // Importa o auth do Firebase
+import { db, auth } from "../services/firebaseconfig";
+
 
 export default function AdmHome() {
   const [produtos, setProdutos] = useState([]);

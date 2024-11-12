@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { getDocs, collection, doc, updateDoc } from "firebase/firestore";
 import { db } from "../services/firebaseConfig";
+import { useNavigate } from "react-router-dom"; // Importa useNavigate para redirecionamento
 
 const AdmPedidos = () => {
   const [pedidos, setPedidos] = useState([]);
+  const navigate = useNavigate(); // Inicializa o hook de navegação
 
   // Função para buscar todos os pedidos do Firestore
   async function getPedidos() {
@@ -48,9 +50,17 @@ const AdmPedidos = () => {
 
   return (
     <div className="PagePedidos container mt-5">
-      
       <div className="page-content">
-        <h1 className="mb-4">Todos os Pedidos</h1>
+        <div className="d-flex justify-content-between align-items-center mb-4">
+          <h1>Todos os Pedidos</h1>
+          <button
+            className="btn btn-secondary"
+            onClick={() => navigate("/admHome")} // Redireciona para a página inicial
+          >
+            Voltar para a Página Inicial
+          </button>
+        </div>
+
         <div className="orders-container">
           {pedidos.length > 0 ? (
             pedidos.map((pedido) => (

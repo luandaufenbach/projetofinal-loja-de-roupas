@@ -2,6 +2,7 @@ import { useState } from "react";
 import { db, storage } from "../services/firebaseconfig"; // Assuming you have both db and storage configured
 import { addDoc, collection } from "firebase/firestore";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+import { useNavigate } from "react-router-dom"; // Importa o hook useNavigate para redirecionamento
 
 export default function AddProduto() {
   const [nomeProduto, setNomeProduto] = useState("");
@@ -10,8 +11,9 @@ export default function AddProduto() {
   const [categoria, setCategoria] = useState("");
   const [productImg, setProductImg] = useState(null);
   const [error, setError] = useState("");
+  const navigate = useNavigate(); // Inicializa o hook de navegação
 
-  const types = ["image/png", "image/jpeg"]; // Valid image types
+  const types = ["image/png", "image/jpeg"]; // Tipos de imagem válidos
 
   const productImgHandler = (e) => {
     const selectedFile = e.target.files[0];
@@ -54,16 +56,15 @@ export default function AddProduto() {
             imagem: url,
           });
 
-
           setNomeProduto("");
           setTamanho("");
           setPreco("");
           setCategoria("");
           setProductImg(null);
-          document.getElementById("file").value = ""; 
+          document.getElementById("file").value = "";
           alert("Produto adicionado com sucesso!");
         } catch (error) {
-          console.error("Error adding document: ", error);
+          console.error("Erro ao adicionar o documento: ", error);
           alert("Erro ao adicionar o documento.");
         }
       }
@@ -73,10 +74,18 @@ export default function AddProduto() {
   return (
     <div className="container mt-4">
       <div className="card p-4 shadow-sm">
-        <h2 className="mb-4 text-center">Adicionar Produto</h2>
+        <div className="d-flex justify-content-between align-items-center mb-4">
+          <button
+            className="btn btn-secondary"
+            onClick={() => navigate("/admHome")} // Redireciona para a página admHome
+          >
+          voltar
+          </button>
+          <h2 className="mb-0 text-center flex-grow-1">Adicionar Produto</h2>
+        </div>
 
         <div className="mb-3">
-          <label className="form-label">Nome </label>
+          <label className="form-label">Nome</label>
           <input
             onChange={(e) => setNomeProduto(e.target.value)}
             type="text"

@@ -46,7 +46,19 @@ const Cart = () => {
 
   return (
     <div className="container mt-5">
+      <div className="page-content">
+      <div className="d-flex justify-content-between align-items-center mb-4">
       <h2 className="mb-4">Carrinho de Compras</h2>
+      <button
+            className="btn btn-secondary"
+            onClick={() => navigate("/")} // Redireciona para a página inicial
+          >
+            Voltar para a Página Inicial
+          </button>
+        </div>
+
+
+
 
       {cartItems.length === 0 ? (
         <div className="alert alert-info">Seu carrinho está vazio.</div>
@@ -108,6 +120,7 @@ const Cart = () => {
           </div>
         </div>
       )}
+    </div>
     </div>
   );
 };

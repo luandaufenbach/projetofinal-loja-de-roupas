@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { db, auth } from '../services/firebaseConfig'; // Importe o Firebase Auth e Firestore do seu arquivo de configuração
+import { db, auth } from '../services/firebaseConfig';
 import { collection, addDoc } from 'firebase/firestore';
 import { onAuthStateChanged } from 'firebase/auth';
+import { useNavigate } from 'react-router-dom'; // Importe o hook de navegação
 
 const Checkout = () => {
   const [formData, setFormData] = useState({
@@ -11,7 +12,8 @@ const Checkout = () => {
     complemento: '',
   });
   const [cartItems, setCartItems] = useState([]);
-  const [userEmail, setUserEmail] = useState(null); // Armazenar o email do usuário
+  const [userEmail, setUserEmail] = useState(null);
+  const navigate = useNavigate(); // Inicialize o hook useNavigate
 
   // Verificar o estado de autenticação e obter o email do usuário
   useEffect(() => {
@@ -49,19 +51,22 @@ const Checkout = () => {
     try {
       // Adiciona os dados de entrega, do carrinho e o email ao Firestore
       await addDoc(collection(db, 'pedidos'), {
-        email: userEmail, // Email do usuário logado
+        email: userEmail,
         endereco: formData,
         produtos: cartItems,
-        status: 'em processo', // Define um status inicial
+        status: 'em processo',
         data: new Date(),
       });
 
       alert('Pedido realizado com sucesso!');
-      
+
       // Limpar o localStorage e o formulário após o pedido
       localStorage.removeItem("carrinho");
       setCartItems([]);
       setFormData({ cep: '', numero: '', rua: '', complemento: '' });
+
+      // Redirecionar para a página de pedidos
+      navigate('/pedidos'); // Substitua '/pedidos' pelo caminho correto da sua página de pedidos
     } catch (error) {
       console.error("Erro ao salvar pedido: ", error);
       alert('Erro ao finalizar o pedido. Tente novamente.');
@@ -120,6 +125,5 @@ const Checkout = () => {
     </div>
   );
 };
-
 
 export default Checkout;
