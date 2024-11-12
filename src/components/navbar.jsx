@@ -66,6 +66,12 @@ const Navbar = ({ onCategorySelect, onSearch }) => {
               <FaShoppingCart size={24} style={{ color: "black" }} />
             </Link>
           </div>
+          
+          <div className="navbar-contacts">
+              <Link to="/pedidos">
+               Meus pedidos 
+              </Link>
+          </div>
 
           <div className="navbar-contact">
             <a href="https://wa.me/5548999425176" target="_blank" rel="noopener noreferrer">

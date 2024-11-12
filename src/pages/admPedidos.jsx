@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { getDocs, collection, doc, updateDoc } from "firebase/firestore";
 import { db } from "../services/firebaseConfig";
-import AdmNavbar from "../components/admNavbar";
-import "../style.css";
 
 const AdmPedidos = () => {
   const [pedidos, setPedidos] = useState([]);
@@ -40,9 +38,17 @@ const AdmPedidos = () => {
     getPedidos(); // Carrega todos os pedidos ao iniciar a página
   }, []);
 
+  // Função para calcular o total do pedido somando os preços dos produtos
+  const calculateTotal = (produtos) => {
+    if (Array.isArray(produtos)) {
+      return produtos.reduce((total, item) => total + item.preco, 0);
+    }
+    return 0;
+  };
+
   return (
     <div className="PagePedidos container mt-5">
-      <AdmNavbar admin={true} />
+      
       <div className="page-content">
         <h1 className="mb-4">Todos os Pedidos</h1>
         <div className="orders-container">
@@ -72,7 +78,7 @@ const AdmPedidos = () => {
                       <li className="list-group-item">Nenhum item encontrado.</li>
                     )}
                   </ul>
-                  <p className="mt-3"><strong>Total:</strong> R$ {pedido.total?.toFixed(2)}</p>
+                  <p className="mt-3"><strong>Total:</strong> R$ {pedido.total ? pedido.total.toFixed(2) : calculateTotal(pedido.produtos).toFixed(2)}</p>
 
                   {/* Select para atualizar o status */}
                   <label htmlFor={`status-${pedido.id}`} className="mt-3"><strong>Alterar Status:</strong></label>

@@ -78,6 +78,7 @@ const AdmNavbar = ({ onCategorySelect }) => {
         <li onClick={() => onCategorySelect("Calça")}><strong>CALÇAS</strong></li>
         <li onClick={() => onCategorySelect("Bermuda")}><strong>BERMUDAS</strong></li>
       </ul>
+      <hr className="traco" />
     </nav>
   );
 };
