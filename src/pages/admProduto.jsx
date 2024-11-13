@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { getDoc, doc, updateDoc, deleteDoc } from "firebase/firestore";
-import { db, auth } from "../services/firebaseconfig"; // Certifique-se de importar o auth
+import { db, auth } from "../services/firebaseconfig";
 import Navbar from "../components/admNavbar";
 import "../style.css";
 
@@ -50,7 +50,7 @@ export default function AdmProduto() {
         categoria: categoria,
       });
       alert("Produto atualizado com sucesso!");
-      navigate("/admHome"); // Redireciona para a página do administrador
+      navigate("/admHome"); // Redireciona para a página do amd
     } catch (error) {
       alert("Erro ao atualizar produto");
       console.log(error);
@@ -76,7 +76,7 @@ export default function AdmProduto() {
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
       if (user) {
-        setUserName(user.displayName || user.email); // Pega o displayName, se não, usa o email
+        setUserName(user.displayName || user.email); // Pega o nome, se não, usa o email
       } else {
         setUserName("");
       }

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom"; // Importa o useNavigate
+import { useParams, useNavigate } from "react-router-dom";
 import { getDoc, doc, getDocs, collection, query, where } from "firebase/firestore";
 import { db, auth } from "../services/firebaseconfig";
 import { onAuthStateChanged } from "firebase/auth";
@@ -12,7 +12,7 @@ export default function Produto() {
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState(null);
   const [nomeUser, setNomeUser] = useState("");
-  const navigate = useNavigate(); // Inicializa o useNavigate
+  const navigate = useNavigate(); 
 
   // Função para buscar informações do usuário logado
   async function getUsuarios() {

@@ -56,7 +56,7 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
-    getProdutos(); // Busca os produtos ao carregar a página
+    getProdutos(); // Busca os produtos ao carregar a pagina
   }, []);
 
   useEffect(() => {

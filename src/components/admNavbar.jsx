@@ -10,13 +10,13 @@ import "../style.css";
 const AdmNavbar = ({ onCategorySelect }) => {
   const [user, setUser] = useState(null); // Estado para o usuário logado
 
-  // Verificar se o usuário está logado ao carregar a página
+  // verificar se o usuário está logado quando carrega a página
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       if (currentUser) {
         setUser(currentUser.displayName || currentUser.email); // Defina o nome ou email
       } else {
-        setUser(null); // Se não houver usuário logado
+        setUser(null); // Se não exisitir usuário logado
       }
     });
 

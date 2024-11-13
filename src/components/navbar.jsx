@@ -10,18 +10,18 @@ const Navbar = ({ onCategorySelect, onSearch }) => {
   const [userName, setUserName] = useState(null); // Estado para o nome do usuário
   const [searchTerm, setSearchTerm] = useState(""); // Estado para o termo de busca
 
-  // Verificar se o usuário está logado ao carregar a página
+  // verificar se o usuário está logado ao carregar a página
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
       if (currentUser) {
-        // Obter o documento do usuário no Firestore
+        // Obter o documento do usuario no Firestore
         const userDocRef = doc(db, "usuarios", currentUser.email);
         const userDoc = await getDoc(userDocRef);
 
         if (userDoc.exists()) {
-          setUserName(userDoc.data().nome); // Define o nome do usuário
+          setUserName(userDoc.data().nome); // define o nome do usuário
         } else {
-          setUserName(currentUser.email); // Fallback para o email caso o documento não exista
+          setUserName(currentUser.email); // condicao para o email caso o documento não exista
         }
       } else {
         setUserName(null); // Se não houver usuário logado

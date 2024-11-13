@@ -33,7 +33,7 @@ const Pedidos = () => {
         // Filtra pedidos apenas do usuário logado
         q = query(
           collection(db, "pedidos"),
-          where("userId", "==", user.uid) // Somente pedidos do usuário logado
+          where("email", "==", user.email) // Somente pedidos do usuário logado
         );
       }
 
