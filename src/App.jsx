@@ -14,6 +14,8 @@ import AdmPedidos from "./pages/admPedidos";
 import Pedidos from "./pages/pedidos";
 
 
+
+
 function App() {
   // Estado para gerenciar o carrinho de compras
   const [cartItems, setCartItems] = useState([]);
@@ -37,7 +39,6 @@ function App() {
         <Route path="/checkout" element={<Checkout />} />
         <Route path="/admPedidos" element={<AdmPedidos />} />
         <Route path="/pedidos" element={<Pedidos/>} />
-
       </Routes>
     </>
   );

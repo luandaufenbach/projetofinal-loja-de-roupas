@@ -6,6 +6,7 @@ import { getDocs, collection } from "firebase/firestore";
 import { db, auth } from "../services/firebaseconfig";
 
 
+
 export default function AdmHome() {
   const [produtos, setProdutos] = useState([]);
   const [filteredProdutos, setFilteredProdutos] = useState([]);
@@ -38,18 +39,24 @@ export default function AdmHome() {
     getProdutos(); // Busca os produtos ao carregar a página
   }, []);
 
-  // Função para filtrar os produtos por categoria
-  const handleCategorySelect = (category) => {
-    const filtered = produtos.filter(
-      (produto) => produto.categoria === category
+  // Função para buscar produtos com base no termo de busca
+  const handleSearch = (searchTerm) => {
+    if (!searchTerm) {
+      setFilteredProdutos(produtos); // Exibe todos os produtos se não houver termo
+      return;
+    }
+    const filtered = produtos.filter((produto) =>
+      produto.nome.toLowerCase().includes(searchTerm.toLowerCase())
     );
     setFilteredProdutos(filtered);
   };
 
+
   return (
     <div className="PageHome">
       {/* Passa o nome do usuário logado para o AdmNavbar */}
-      <AdmNavbar admin={nomeUser} onCategorySelect={handleCategorySelect} />
+      <AdmNavbar onSearch={handleSearch} />
+
       <div className="page-content">
         <div className="product-container">
           {/*produtos filtrados ou todos os produtos */}

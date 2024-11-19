@@ -7,8 +7,8 @@ import { db, auth } from "../services/firebaseconfig";
 import { onAuthStateChanged } from "firebase/auth";
 
 export default function Home() {
-  const [produtos, setProdutos] = useState([]);
-  const [filteredProdutos, setFilteredProdutos] = useState([]);
+  const [produtos, setProdutos] = useState([]); // Todos os produtos
+  const [filteredProdutos, setFilteredProdutos] = useState([]); // Produtos filtrados
   const [user, setUser] = useState(null);
   const [nomeUser, setNomeUser] = useState("");
 
@@ -56,7 +56,7 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
-    getProdutos(); // Busca os produtos ao carregar a pagina
+    getProdutos(); // Busca os produtos ao carregar a página
   }, []);
 
   useEffect(() => {
@@ -73,10 +73,26 @@ export default function Home() {
     setFilteredProdutos(filtered);
   };
 
+  // Função para buscar produtos com base no termo de busca
+  const handleSearch = (searchTerm) => {
+    if (!searchTerm) {
+      setFilteredProdutos(produtos); // Exibe todos os produtos se não houver termo
+      return;
+    }
+    const filtered = produtos.filter((produto) =>
+      produto.nome.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+    setFilteredProdutos(filtered);
+  };
+
   return (
     <div className="PageHome">
-      {/* Passa o nome do usuário logado para o Navbar */}
-      <Navbar user={nomeUser} onCategorySelect={handleCategorySelect} />
+      {/* Passa o nome do usuário logado e a função de busca para o Navbar */}
+      <Navbar
+        user={nomeUser}
+        onCategorySelect={handleCategorySelect}
+        onSearch={handleSearch} // Passa a função de busca
+      />
       <div className="page-content">
         <div className="product-container">
           {/* Exibe os produtos filtrados ou todos os produtos */}
@@ -99,7 +115,7 @@ export default function Home() {
               </div>
             ))
           ) : (
-            <p>Nenhum produto encontrado para esta categoria</p>
+            <p>Nenhum produto encontrado para esta categoria ou termo.</p>
           )}
         </div>
       </div>

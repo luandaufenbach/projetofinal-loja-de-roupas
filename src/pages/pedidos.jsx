@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { getDocs, collection, query, where } from "firebase/firestore";
 import { db, auth } from "../services/firebaseConfig";
 import { onAuthStateChanged } from "firebase/auth"; // Para verificar o usuário logado
-import { useNavigate } from "react-router-dom"; // Para redirecionamento
+import { useNavigate } from "react-router-dom"; 
 
 const Pedidos = () => {
   const [pedidos, setPedidos] = useState([]);

@@ -1,14 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { FaWhatsapp } from "react-icons/fa";
 import { CgAddR } from "react-icons/cg";
+import { FaSearch } from "react-icons/fa";
 import { MdRequestPage } from "react-icons/md";
 import { Link } from "react-router-dom";
 import { auth } from "../services/firebaseconfig"; // Importar a autenticação do Firebase
 import { onAuthStateChanged } from "firebase/auth";
 import "../style.css";
 
-const AdmNavbar = ({ onCategorySelect }) => {
+const AdmNavbar = ({ onCategorySelect, onSearch }) => {
   const [user, setUser] = useState(null); // Estado para o usuário logado
+  const [searchTerm, setSearchTerm] = useState(""); // Estado para o termo de busca
 
   // verificar se o usuário está logado quando carrega a página
   useEffect(() => {
@@ -23,6 +25,14 @@ const AdmNavbar = ({ onCategorySelect }) => {
     return () => unsubscribe(); // Limpar a função ao desmontar o componente
   }, []);
 
+  // Função para lidar com a busca
+  const handleSearch = (e) => {
+    e.preventDefault();
+    if (onSearch && searchTerm.trim() !== "") {
+      onSearch(searchTerm); // Chama a função de busca com o termo
+    }
+  };
+
   return (
     <nav className="navbar-container">
       <div className="navbar">
@@ -33,7 +43,14 @@ const AdmNavbar = ({ onCategorySelect }) => {
         </div>
 
         <div className="navbar-search">
-          <input type="text" placeholder="Buscar..." />
+          <form onSubmit={handleSearch}>
+            <input
+              type="text"
+              placeholder="Buscar..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+          </form>
         </div>
 
         <div className="navbar-right">
@@ -47,7 +64,11 @@ const AdmNavbar = ({ onCategorySelect }) => {
           </div>
 
           <div className="navbar-contact">
-            <a href="https://wa.me/5548999425176" target="_blank" rel="noopener noreferrer">
+            <a
+              href="https://wa.me/5548999425176"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               <FaWhatsapp size={24} /> Fale Conosco
             </a>
           </div>
@@ -64,19 +85,33 @@ const AdmNavbar = ({ onCategorySelect }) => {
                 </button>
               </>
             ) : (
-              <Link to="/login" className="btn-login">Entrar</Link>
+              <Link to="/login" className="btn-login">
+                Entrar
+              </Link>
             )}
           </div>
         </div>
       </div>
 
       <ul className="navbar-categories">
-        <li onClick={() => onCategorySelect("Camiseta")}><strong>CAMISETAS</strong></li>
-        <li onClick={() => onCategorySelect("Camiseta manga longa")}><strong>CAMISETAS MANGA LONGA</strong></li>
-        <li onClick={() => onCategorySelect("Jaqueta")}><strong>JAQUETAS</strong></li>
-        <li onClick={() => onCategorySelect("Moletom")}><strong>MOLETONS</strong></li>
-        <li onClick={() => onCategorySelect("Calça")}><strong>CALÇAS</strong></li>
-        <li onClick={() => onCategorySelect("Bermuda")}><strong>BERMUDAS</strong></li>
+        <li onClick={() => onCategorySelect("Camiseta")}>
+          <strong>CAMISETAS</strong>
+        </li>
+        <li onClick={() => onCategorySelect("Camiseta manga longa")}>
+          <strong>CAMISETAS MANGA LONGA</strong>
+        </li>
+        <li onClick={() => onCategorySelect("Jaqueta")}>
+          <strong>JAQUETAS</strong>
+        </li>
+        <li onClick={() => onCategorySelect("Moletom")}>
+          <strong>MOLETONS</strong>
+        </li>
+        <li onClick={() => onCategorySelect("Calça")}>
+          <strong>CALÇAS</strong>
+        </li>
+        <li onClick={() => onCategorySelect("Bermuda")}>
+          <strong>BERMUDAS</strong>
+        </li>
       </ul>
       <hr className="traco" />
     </nav>

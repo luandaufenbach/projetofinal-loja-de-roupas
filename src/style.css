@@ -80,7 +80,7 @@ body {
 }
 
 .navbar-contacts a:hover {
-  color: #555; /* Verde claro ao passar o mouse */
+  color: #555; 
 }
 
 
@@ -89,37 +89,43 @@ body {
   margin: 10px;
 }
 
+
+
 .btn-login {
-  background-color: black;
-  color: white;
-  padding: 8px 12px;
+  background-color: white;
+  border: none;
+  padding-left: 10px;
+  outline: 2px solid black;
+  padding-right: 10px;
   border-radius: 5px;
   text-decoration: none;
   font-weight: bold;
   margin: 10px;
-  font-size: 14px; /* Tamanho da fonte */
+  color: black;
 }
 
 .btn-login:hover {
-  background-color: #1f1f1f; /* Efeito hover no botão Entrar */
+  background-color: black; 
+  color: white;
 }
 
 
 .btn-logout {
-  background-color: black; /* Cor de fundo vermelha */
-  color: white; /* Texto branco */
-  border: none; /* Remover borda */
-  padding: 10px 20px; /* Espaçamento interno (padding) */
-  border-radius: 5px; /* Arredondar bordas */
-  cursor: pointer; /* Alterar cursor para pointer ao passar o mouse */
-  font-weight: bold; /* Deixar o texto em negrito */
-  font-size: 14px; /* Tamanho da fonte */
-  margin-left: 10px;
+  background-color: white;
+  border: none;
+  padding-left: 10px;
+  outline: 2px solid black;
+  padding-right: 10px;
+  border-radius: 5px;
+  text-decoration: none;
+  font-weight: bold;
+  margin: 10px;
+  color:black;
 }
-
 /* Estilo ao passar o mouse (hover) no botão */
 .btn-logout:hover {
-  background-color: #1f1f1f; /* Escurecer o tom de vermelho ao passar o mouse */
+  background-color: black; 
+  color: white;
 }
 
 .traco {

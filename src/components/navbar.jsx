@@ -10,18 +10,18 @@ const Navbar = ({ onCategorySelect, onSearch }) => {
   const [userName, setUserName] = useState(null); // Estado para o nome do usuário
   const [searchTerm, setSearchTerm] = useState(""); // Estado para o termo de busca
 
-  // verificar se o usuário está logado ao carregar a página
+  // Verificar se o usuário está logado ao carregar a página
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
       if (currentUser) {
-        // Obter o documento do usuario no Firestore
+        // Obter o documento do usuário no Firestore
         const userDocRef = doc(db, "usuarios", currentUser.email);
         const userDoc = await getDoc(userDocRef);
 
         if (userDoc.exists()) {
-          setUserName(userDoc.data().nome); // define o nome do usuário
+          setUserName(userDoc.data().nome); // Define o nome do usuário
         } else {
-          setUserName(currentUser.email); // condicao para o email caso o documento não exista
+          setUserName(currentUser.email); // Caso não exista o documento, usa o email
         }
       } else {
         setUserName(null); // Se não houver usuário logado
@@ -66,15 +66,17 @@ const Navbar = ({ onCategorySelect, onSearch }) => {
               <FaShoppingCart size={24} style={{ color: "black" }} />
             </Link>
           </div>
-          
+
           <div className="navbar-contacts">
-              <Link to="/pedidos">
-               Meus pedidos 
-              </Link>
+            <Link to="/pedidos">Meus pedidos</Link>
           </div>
 
           <div className="navbar-contact">
-            <a href="https://wa.me/5548999425176" target="_blank" rel="noopener noreferrer">
+            <a
+              href="https://wa.me/5548999425176"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               <FaWhatsapp size={24} /> Fale Conosco
             </a>
           </div>
@@ -91,21 +93,35 @@ const Navbar = ({ onCategorySelect, onSearch }) => {
                 </button>
               </>
             ) : (
-              <Link to="/login" className="btn-login">Entrar</Link>
+              <Link to="/login" className="btn-login">
+                Entrar
+              </Link>
             )}
           </div>
         </div>
       </div>
 
       <ul className="navbar-categories">
-        <li onClick={() => onCategorySelect("Camiseta")}><strong>CAMISETAS</strong></li>
-        <li onClick={() => onCategorySelect("Camiseta manga longa")}><strong>CAMISETAS MANGA LONGA</strong></li>
-        <li onClick={() => onCategorySelect("Jaqueta")}><strong>JAQUETAS</strong></li>
-        <li onClick={() => onCategorySelect("Moletom")}><strong>MOLETONS</strong></li>
-        <li onClick={() => onCategorySelect("Calça")}><strong>CALÇAS</strong></li>
-        <li onClick={() => onCategorySelect("Bermuda")}><strong>BERMUDAS</strong></li>
+        <li onClick={() => onCategorySelect("Camiseta")}>
+          <strong>CAMISETAS</strong>
+        </li>
+        <li onClick={() => onCategorySelect("Camiseta manga longa")}>
+          <strong>CAMISETAS MANGA LONGA</strong>
+        </li>
+        <li onClick={() => onCategorySelect("Jaqueta")}>
+          <strong>JAQUETAS</strong>
+        </li>
+        <li onClick={() => onCategorySelect("Moletom")}>
+          <strong>MOLETONS</strong>
+        </li>
+        <li onClick={() => onCategorySelect("Calça")}>
+          <strong>CALÇAS</strong>
+        </li>
+        <li onClick={() => onCategorySelect("Bermuda")}>
+          <strong>BERMUDAS</strong>
+        </li>
       </ul>
-      
+
       <hr className="traco" />
     </nav>
   );
