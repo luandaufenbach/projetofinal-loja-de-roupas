@@ -1,29 +1,47 @@
 import React, { useState, useEffect } from "react";
 import { FaWhatsapp } from "react-icons/fa";
 import { CgAddR } from "react-icons/cg";
-import { FaSearch } from "react-icons/fa";
 import { MdRequestPage } from "react-icons/md";
 import { Link } from "react-router-dom";
 import { auth } from "../services/firebaseconfig"; // Importar a autenticação do Firebase
 import { onAuthStateChanged } from "firebase/auth";
+import { getFirestore, collection, query, where, getDocs } from "firebase/firestore"; // Importar Firestore
 import "../style.css";
 
 const AdmNavbar = ({ onCategorySelect, onSearch }) => {
-  const [user, setUser] = useState(null); // Estado para o usuário logado
+  const [user, setUser] = useState(null); // Estado para o nome do usuário logado
   const [searchTerm, setSearchTerm] = useState(""); // Estado para o termo de busca
+  const db = getFirestore(); // Instância do Firestore
 
-  // verificar se o usuário está logado quando carrega a página
+  // Verificar se o usuário está logado quando carrega a página
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
       if (currentUser) {
-        setUser(currentUser.displayName || currentUser.email); // Defina o nome ou email
+        const userEmail = currentUser.email; // Email do usuário logado
+        try {
+          // Consulta ao Firestore para buscar o nome pelo email
+          const usersRef = collection(db, "usuarios");
+          const q = query(usersRef, where("email", "==", userEmail));
+          const querySnapshot = await getDocs(q);
+
+          if (!querySnapshot.empty) {
+            // Assumimos que só há um documento por email
+            const userData = querySnapshot.docs[0].data();
+            setUser(userData.nome || userEmail); // Atualizar com o nome ou email se o nome não estiver disponível
+          } else {
+            setUser(userEmail); // Se não encontrado no Firestore, usar o email
+          }
+        } catch (error) {
+          console.error("Erro ao buscar usuário:", error);
+          setUser(userEmail); // Se ocorrer um erro, usar o email
+        }
       } else {
-        setUser(null); // Se não exisitir usuário logado
+        setUser(null); // Se não houver usuário logado
       }
     });
 
     return () => unsubscribe(); // Limpar a função ao desmontar o componente
-  }, []);
+  }, [db]);
 
   // Função para lidar com a busca
   const handleSearch = (e) => {
